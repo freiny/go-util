@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
+	"path"
 	"strings"
 
 	"github.com/freiny/go-util/ffile"
@@ -15,8 +16,12 @@ func TestAll() bool {
 	nTests := 0
 	nPassed := 0
 
-	f := func(path string) error {
-		os.Chdir(path)
+	f := func(folder string) error {
+		b := path.Base(folder)
+		if b[0] == byte('.') && len(b) > 1 {
+			return nil
+		}
+		os.Chdir(folder)
 		wd, _ := os.Getwd()
 
 		cmd := "go"
