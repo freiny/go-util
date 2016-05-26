@@ -11,7 +11,10 @@ import (
 
 // TestAll walks thru all folders in the working directory
 // running "go test" in each folder
-func TestAll() {
+func TestAll() bool {
+	nTests := 0
+	nPassed := 0
+
 	f := func(path string) error {
 		os.Chdir(path)
 		wd, _ := os.Getwd()
@@ -25,6 +28,7 @@ func TestAll() {
 		isFail := strings.Contains(o, "FAIL")
 		if err != nil {
 			if isFail {
+				nTests++
 				fmt.Println("FAIL:", wd)
 				fmt.Println(string(out))
 			}
@@ -32,9 +36,12 @@ func TestAll() {
 		}
 
 		if isPass {
+			nTests++
+			nPassed++
 			fmt.Println("PASS:", wd)
 		}
 		return nil
 	}
 	ffile.WalkFoldersFunc(f)
+	return nPassed == nTests
 }
