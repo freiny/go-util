@@ -7,10 +7,9 @@ import (
 	"syscall"
 )
 
-// WalkFoldersFunc ...
-func WalkFoldersFunc(f func(string)) {
-	// f(path)
-	// base := "/Users/name/dev/golang/src/github.com/freiny/ztmp"
+// WalkFoldersFunc walks thru all folders in working directory and
+// runs a callback function for each folder
+func WalkFoldersFunc(f func(string) error) {
 	fn := func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			return fmt.Errorf("%v", err)
